@@ -54,7 +54,7 @@ class BronzeVendedoresPipeline:
         steps = [
             ("Extract Data from Fenix Database",
              DatabaseExtractor(db_alias=spec.db_alias_load, query=sql_text, params=params)),
-            ("Load DatawareHouse Bronze Fracturas", DWBatchedLoader(
+            ("Load DatawareHouse Bronze Vendedores", DWBatchedLoader(
                 db_alias=self.database_config.db_alias_load,
                 model_class=self.database_config.model_class,
                 mode=self.database_config.mode,

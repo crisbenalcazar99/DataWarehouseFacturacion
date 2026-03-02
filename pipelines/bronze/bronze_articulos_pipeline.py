@@ -2,7 +2,7 @@ from typing import Optional, Type, List, Dict
 
 from common.session_manager import get_session
 from config.logging_pipeline import LoggingPipeline
-from entities.bronze.bronze_clientes_entity import BronzeClienteEntity
+from entities.bronze.bronze_articulos_entity import BronzeArticulosEntity
 from etl.extract.db_extractor import DatabaseExtractor
 from etl.load.db_load import DWBatchedLoader
 from utils.RunMode import RunMode
@@ -13,7 +13,7 @@ from utils.source_spec import SourceSpec
 
 class DatabaseConfig:
     db_alias_load: str = "LOCAL"
-    model_class: BronzeClienteEntity = BronzeClienteEntity
+    model_class: BronzeArticulosEntity = BronzeArticulosEntity
     mode: ModePersistence = ModePersistence.INSERT
     conflict_cols: tuple[str] = None
     batch_size: int = 3000
@@ -21,15 +21,15 @@ class DatabaseConfig:
 
 
 class PipelineConfig:
-    pipeline_name: str = "Bronze Clientes Entity Pipeline"
+    pipeline_name: str = "Bronze Articulos Entity Pipeline"
     mode_pipeline: RunMode = RunMode.INICIAL
 
     SOURCE_BY_MODE: Dict[RunMode, List[SourceSpec]] = {
         RunMode.INICIAL: [
-            SourceSpec("fenix", "FENIX", "initialization", "clientes.sql")
+            SourceSpec("fenix", "FENIX", "initialization", "articulos.sql")
         ],
         RunMode.INCREMENTAL: [
-            SourceSpec("fenix", "FENIX", "incremental", "clientes_incremental.sql")
+            SourceSpec("fenix", "FENIX", "incremental", "articulos_incremental.sql")
         ]
     }
 
@@ -54,7 +54,7 @@ class BronzeClientesPipeline:
         steps = [
             ("Extract Data from Fenix Database",
              DatabaseExtractor(db_alias=spec.db_alias_load, query=sql_text, params=params)),
-            ("Load DatawareHouse Bronze Clientes", DWBatchedLoader(
+            ("Load DatawareHouse Bronze Articulos", DWBatchedLoader(
                 db_alias=self.database_config.db_alias_load,
                 model_class=self.database_config.model_class,
                 mode=self.database_config.mode,
