@@ -11,6 +11,22 @@
     ]
 ) }}
 
+WITH stg_codigos AS (
+    SELECT
+        id_codigo,
+        codigo,
+        codigo_nombre,
+        familia_producto,
+        atencion,
+        venta_dirigida,
+        concepto_1,
+        concepto_2,
+        plan,
+        REPLACE(vigencia, 'VIGENCIA ', '') AS vigencia
+    FROM {{ref('dbt_fenix_codigos')}} dco_0
+
+)
+
 SELECT
     DISTINCT
     id_codigo,
@@ -23,4 +39,4 @@ SELECT
     concepto_2,
     plan,
     vigencia
-FROM {{ref('dbt_fenix_codigos')}} dco_0
+FROM stg_codigos

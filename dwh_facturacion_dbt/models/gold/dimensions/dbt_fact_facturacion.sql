@@ -28,6 +28,13 @@ WITH facturas_comercial AS (
     )
 ),
 
+facturas_convenios AS (
+    SELECT DISTINCT id_factura, dco_default_convenios.id_codigo, codigo_documento
+    FROM {{ref('dbt_dim_facturas')}} f_0
+    JOIN {{ref('dbt_dim_codigos')}} dco_default_convenios ON dco_default_convenios.codigo = 'CONVE.FACT.MANUAL'
+    WHERE f_0.codigo_descuento LIKE '%ALIANZA%'
+),
+
 stg_fact_facturacion AS (
     SELECT
         df_0.id_factura,
@@ -43,9 +50,10 @@ stg_fact_facturacion AS (
         f_0.id_sucursal,
         CASE
             WHEN dco_0.id_codigo IS NOT NULL THEN dco_0.id_codigo
-            WHEN f_0.codigo_descuento LIKE '%ALIANZA%' THEN dco_default_convenios.id_codigo
-            ELSE dco_default.id_codigo END
-        AS id_codigo,
+            WHEN fcon_0.id_factura IS NOT NULL THEN fcon_0.id_codigo
+            -- WHEN f_0.codigo_descuento LIKE '%ALIANZA%' THEN dco_default_convenios.id_codigo
+            ELSE dco_default.id_codigo
+        END AS id_codigo,
 
         t_0.cantidad_articulos,
         t_0.valor_unitario,
@@ -77,7 +85,8 @@ stg_fact_facturacion AS (
     JOIN {{ref('dbt_dim_vendedores')}} dv_0 ON f_0.codigo_vendedor = dv_0.codigo_vendedor
     JOIN {{ref('dbt_dim_articulos')}} da_0 ON t_0.codigo_articulo = da_0.codigo_articulo
     LEFT JOIN {{ref('dbt_dim_codigos')}} dco_0 ON f_0.comentario_3 = dco_0.codigo
-    LEFT JOIN {{ref('dbt_dim_codigos')}} dco_default_convenios ON dco_default_convenios.codigo = 'CONVE.FACT.MANUAL'
+    --LEFT JOIN {{ref('dbt_dim_codigos')}} dco_default_convenios ON dco_default_convenios.codigo = 'CONVE.FACT.MANUAL'
+    LEFT JOIN facturas_convenios fcon_0 ON df_0.codigo_documento = fcon_0.codigo_documento
     LEFT JOIN {{ref('dbt_dim_codigos')}} dco_default ON dco_default.codigo = 'MANUAL.FACT.MANUAL'
     LEFT JOIN {{(ref('reasignacion_periodo_fiscal'))}} rpf_0 ON f_0.numero_factura = rpf_0.numero_factura
     --LEFT JOIN {{ref('vendedores_comercial')}} vc_0 ON dv_0.codigo_vendedor = vc_0.codigo_vendedor

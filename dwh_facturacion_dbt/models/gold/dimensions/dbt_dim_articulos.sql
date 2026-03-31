@@ -23,7 +23,8 @@ WITH stg_articulos AS (
         CASE
             WHEN ac_0.verificacion_vendedor IS NOT NULL THEN TRUE
             ELSE FALSE END
-        AS is_codigo_comercial
+        AS is_codigo_comercial,
+        concepto
     FROM {{ ref('dbt_fenix_articulos')}} dfa_0
     LEFT JOIN {{ref('articulos_comercial')}}  ac_0 ON dfa_0.codigo = ac_0.codigo_articulo
 )
@@ -37,5 +38,6 @@ SELECT
     familia,
     tipo_plan,
     verificacion_vendedor,
-    is_codigo_comercial
+    is_codigo_comercial,
+    concepto
 FROM stg_articulos

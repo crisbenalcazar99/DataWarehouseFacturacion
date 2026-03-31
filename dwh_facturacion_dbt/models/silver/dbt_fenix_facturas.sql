@@ -17,6 +17,7 @@ WITH camunda_dedup AS (
     WHERE rn = 1
 ),
 
+
 cleaned_facturas AS (
 
     SELECT
@@ -82,6 +83,12 @@ parsed_facturas AS (
 
 ),
 
+facturas_convenios AS (
+    SELECT fc_0.codigo_documento
+    FROM parsed_facturas fc_0
+    WHERE fc_0.codigo_descuento LIKE '%ALIANZA%'
+),
+
 enriched_facturas AS (
 
     SELECT
@@ -95,7 +102,7 @@ enriched_facturas AS (
         pf.comentario_2,
         CASE
             WHEN REGEXP_LIKE(comentario_3, '^ADICIONAL [0-9]+ COMPROBANTES$') THEN 'SF.CA.MANUAL'
-            WHEN (dco_0.codigo IS NOT NULL AND pf.codigo_descuento LIKE '%ALIANZA%') THEN REGEXP_REPLACE(pf.comentario_3, '^([^.]+)\.[^.]+', '\1.CN')
+            WHEN (dco_0.codigo IS NOT NULL AND fc_0.codigo_documento IS NOT NULL) THEN REGEXP_REPLACE(pf.comentario_3, '^([^.]+)\.[^.]+', '\1.CN')
             ELSE pf.comentario_3
         END AS comentario_3,
 
@@ -123,6 +130,7 @@ enriched_facturas AS (
         AND pf.fecha_emision < pe.fecha_cierre
     LEFT JOIN {{ref('reasignacion_islas_temporales')}} rit_0 ON pf.numero_factura = rit_0.numero_factura
     LEFT JOIN {{ref('dbt_dim_codigos')}} dco_0 ON pf.comentario_3 = dco_0.codigo
+    LEFT JOIN facturas_convenios fc_0 ON pf.codigo_documento = fc_0.codigo_documento
 )
 
 SELECT

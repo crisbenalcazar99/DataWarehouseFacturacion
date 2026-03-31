@@ -26,3 +26,4 @@ class BronzeArticulosEntity(Base, BaseModel):
     codart = Column(String(21), unique=True)
     nomart = Column(String(100))
     nomart2 = Column(String(50))
+    fecha_actualizacion = Column(DateTime(timezone=False))

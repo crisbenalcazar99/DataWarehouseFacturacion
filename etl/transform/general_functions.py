@@ -222,7 +222,6 @@ class CleanSpecialCharacters(BaseEstimator, TransformerMixin):
     def transform(self, X:DataFrame = None):
         cols_to_fix = X.columns.intersection(self.columns)
         for column in cols_to_fix:
-
             X[column] = X[column].apply(
                 lambda x: re.sub(r'[\x00-\x1F\x7F]', '', unidecode(str(x))) if pd.notnull(x) else x
             )
