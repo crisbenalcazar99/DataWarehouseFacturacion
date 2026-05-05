@@ -13,6 +13,7 @@ from pipelines.bronze.bronze_vendedores_pipeline import BronzeVendedoresPipeline
 from pipelines.bronze.bronze_articulos_pipeline import BronzeArticulosPipeline
 from pipelines.bronze.bronze_codigos_pipeline import BronzeCodigosPipeline
 from pipelines.bronze.bronze_operatividad_pipeline import BronzeOperatividadPipeline
+from pipelines.features.features_facturas_exluidas_pipeline import FeaturesFacturasExcluidasPipelines
 
 from entities.bronze.broze_facturas_entity import BronzeFacturaEntity
 from entities.bronze.bronze_clientes_entity import BronzeClienteEntity
@@ -26,6 +27,7 @@ from entities.gold.dim_clientes_entity import DimClientesEntity
 from entities.gold.dim_articulos_entity import DimArticulosEntity
 from entities.gold.dim_facturas_entity import DimFacturasEntity
 from entities.gold.dim_codigos import DimCodigos
+from entities.features.facturas_excluidas_entity import FeaturesFacturasExcluidasEntity
 from utils.RunMode import RunMode
 from utils.db_utils import truncate_tables, create_all_tables
 
@@ -58,6 +60,7 @@ if __name__ == "__main__":
             ])
             create_all_tables(session)
 
+    FeaturesFacturasExcluidasPipelines(app_config).run()
     BronzeOperatividadPipeline(app_config).run()
     BronzeCodigosPipeline(app_config).run()
     BronzeArticulosPipeline(app_config).run()

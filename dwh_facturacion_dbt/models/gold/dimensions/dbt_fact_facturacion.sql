@@ -111,8 +111,8 @@ stg_fact_facturacion AS (
     LEFT JOIN {{ref('reasignacion_distribuidores')}} rd_0 ON dc_0.codigo_cliente = rd_0.codigo_cliente AND f_0.fecha_emision >= rd_0.fecha_cambio
     WHERE NOT EXISTS (
         SELECT 1
-        FROM {{ref('facturas_excluidas')}} fe_0
-        WHERE fe_0.codigo_documento = f_0.codigo_documento
+        FROM {{source('features_by_code', 'facturas_excluidas')}} fe_0
+        WHERE fe_0.codigo_factura = f_0.codigo_factura
     )
 
 ),

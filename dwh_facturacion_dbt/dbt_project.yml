@@ -43,12 +43,6 @@ models:
 
 seeds:
   dwh_facturacion_dbt:
-    facturas_excluidas:
-      +schema: features
-      +column_types:
-        codigo_documento: varchar(30)
-        motivo: varchar(200)
-
     reasignacion_periodo_fiscal:
       +schema: features
       +column_types:
@@ -120,6 +114,7 @@ seeds:
         grupo_vendedor_reasignado: varchar(30)
         fecha_cambio: timestamp
         motivo: varchar(128)
+
 
 
 

@@ -4,6 +4,7 @@ from sqlalchemy import text, bindparam
 import pandas as pd
 from common.session_manager import get_session
 import logging
+from pathlib import Path
 
 
 class DatabaseExtractor(BaseEstimator, TransformerMixin):
@@ -71,3 +72,23 @@ class DatabaseExtractorSQLServer(BaseEstimator, TransformerMixin):
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             return pd.DataFrame()
+
+
+class CsvExtractor(BaseEstimator, TransformerMixin):
+    def __init__(self, filepath):
+        self.filepath = filepath
+
+    def fit(self, X=None, y=None):
+        return self
+
+    def transform(self, X=None):
+        if not Path(self.filepath).exists():
+            raise FileNotFoundError(f"No se encontró el archivo CSV en: {self.filepath}")
+
+        df = pd.read_csv(self.filepath, dtype=object)
+
+        if df.empty:
+            raise ValueError(f"El archivo CSV está vacío: {self.filepath}")
+
+        return df
+

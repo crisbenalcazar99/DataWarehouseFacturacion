@@ -319,3 +319,13 @@ sources:
         description: >
           Camunda Opeartividad Documentacion aun no inicializada
 
+  - name: features_by_code
+    schema: analytics_features
+    tables:
+      - name: facturas_excluidas
+        columns:
+          - name: codigo_documento
+          - name: motivo
+          - name: creation_date
+          - name: update_date
+

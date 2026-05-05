@@ -26,8 +26,8 @@ WITH stg_facturas AS (
     FROM {{ ref('dbt_fenix_facturas')}} ff_0
     WHERE NOT EXISTS (
         SELECT 1
-        FROM {{ref('facturas_excluidas')}} fe_0
-        WHERE fe_0.codigo_documento = ff_0.codigo_documento
+        FROM {{source('features_by_code', 'facturas_excluidas')}} fe_0
+        WHERE fe_0.codigo_factura = ff_0.codigo_factura
     )
 ),
 
