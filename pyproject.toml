@@ -8,7 +8,12 @@ version = "0.1.0"
 description = "Data Warehouse ETL de Facturación — pipelines Bronze + Features"
 requires-python = ">=3.10"
 dependencies = [
+    "sqlalchemy==2.0.43",
+    "pandas==2.3.0",
+    "scikit-learn==1.7.0",
+    "python-dotenv==1.1.1",
     "unidecode==1.4.0",
+    "numpy==2.3.1",
     "pyyaml==6.0.2",
 ]
 
