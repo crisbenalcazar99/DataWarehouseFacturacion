@@ -202,6 +202,7 @@ def run_health_check(
     smtp_port: int,
     smtp_user: str,
     smtp_password: str,
+    mail_from: str,
 ) -> None:
     """Envía un correo con la versión instalada del paquete.
 
@@ -209,8 +210,9 @@ def run_health_check(
         to_email      : destinatario del correo.
         smtp_host     : servidor SMTP (ej. smtp-relay.brevo.com).
         smtp_port     : puerto SMTP (ej. 587).
-        smtp_user     : usuario SMTP.
-        smtp_password : contraseña SMTP.
+        smtp_user     : usuario SMTP de Brevo (ej. 9c35cb001@smtp-brevo.com).
+        smtp_password : contraseña SMTP de Brevo.
+        mail_from     : dirección visible en el campo From (ej. crisbenalcazar99@gmail.com).
     """
 
 
@@ -229,10 +231,10 @@ def run_health_check(
 
     msg = MIMEText(body)
     msg["Subject"] = f"[DWH Facturación] Health check OK — v{pkg_version}"
-    msg["From"] = smtp_user
+    msg["From"] = mail_from
     msg["To"] = to_email
 
     with smtplib.SMTP(smtp_host, smtp_port) as server:
         server.starttls()
         server.login(smtp_user, smtp_password)
-        server.sendmail(smtp_user, to_email, msg.as_string())
+        server.sendmail(mail_from, to_email, msg.as_string())
