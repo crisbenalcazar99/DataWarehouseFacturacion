@@ -46,6 +46,11 @@ from dwh_facturacion.config.app_config import AppConfig
 from dwh_facturacion.config.logger_config import setup_logger
 from dwh_facturacion.utils.RunMode import RunMode
 
+import smtplib
+from datetime import datetime
+from email.mime.text import MIMEText
+from importlib.metadata import version, PackageNotFoundError
+
 DBAliasType = Literal["QUANTA", "LOCAL"]
 
 _LOGGER_INITIALIZED = False
@@ -185,3 +190,49 @@ def run_bronze_operatividad(
     from dwh_facturacion.pipelines.bronze.bronze_operatividad_pipeline import BronzeOperatividadPipeline
     app_config = _get_app_config(db_alias, run_mode)
     BronzeOperatividadPipeline(app_config).run()
+
+
+# ---------------------------------------------------------------------------
+# Health check
+# ---------------------------------------------------------------------------
+
+def run_health_check(
+    to_email: str,
+    smtp_host: str,
+    smtp_port: int,
+    smtp_user: str,
+    smtp_password: str,
+) -> None:
+    """Envía un correo con la versión instalada del paquete.
+
+    Args:
+        to_email      : destinatario del correo.
+        smtp_host     : servidor SMTP (ej. smtp-relay.brevo.com).
+        smtp_port     : puerto SMTP (ej. 587).
+        smtp_user     : usuario SMTP.
+        smtp_password : contraseña SMTP.
+    """
+
+
+    try:
+        pkg_version = version("dwh-facturacion")
+    except PackageNotFoundError:
+        pkg_version = "desconocida (paquete no instalado via pip)"
+
+    body = (
+        f"Health check — DWH Facturación\n"
+        f"{'─' * 40}\n"
+        f"Versión instalada : {pkg_version}\n"
+        f"Fecha/hora        : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"Estado            : OK\n"
+    )
+
+    msg = MIMEText(body)
+    msg["Subject"] = f"[DWH Facturación] Health check OK — v{pkg_version}"
+    msg["From"] = smtp_user
+    msg["To"] = to_email
+
+    with smtplib.SMTP(smtp_host, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.sendmail(smtp_user, to_email, msg.as_string())
