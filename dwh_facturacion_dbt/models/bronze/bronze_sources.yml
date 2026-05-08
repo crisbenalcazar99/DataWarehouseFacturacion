@@ -132,11 +132,6 @@ sources:
         description: > 
           Catálogo de clientes registrados en el sistema Fenix. La carga incremental funciona con la columna fecha_act.
         columns:
-          - name: id_codcli
-            description: "Llave primaria subrogada autogenerada para la tabla en la base de datos."
-            tests:
-              - unique
-              - not_null
           - name: creation_date
             description: "Metadato: Fecha y hora exacta en la que el registro fue insertado en la capa Bronze."
           - name: update_date

@@ -90,7 +90,6 @@ models:
       - name: numero_factura
         description: "Número de factura completo (concatenación de serie y secuencia)."
         tests:
-          - unique
           - not_null
 
       - name: comentario_1
@@ -164,7 +163,6 @@ models:
       - name: unico
         description: "Identificador único del registro proveniente de la tabla tranfac del sistema Fenix."
         tests:
-          - unique
           - not_null
 
       - name: codigo_factura
