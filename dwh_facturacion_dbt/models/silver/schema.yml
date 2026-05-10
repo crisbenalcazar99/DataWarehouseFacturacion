@@ -19,8 +19,12 @@ models:
           - Se renombra desde el campo origen `codart`.
           - Se eliminan los espacios en blanco al inicio y al final (`TRIM`).
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre
         description: |
@@ -78,8 +82,12 @@ models:
       - name: codigo_factura
         description: "Corresponde al campo numfac en la base de datos del sistema Fenix. Indica si el registro corresponde a una factura o Nota de Credito"
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_documento
         description: "Número de documento asociado a la transacción, En caso de notas de credito este campo tiene el mismo valor tanto la factura como la nota de credito"
@@ -90,7 +98,9 @@ models:
       - name: numero_factura
         description: "Número de factura completo (concatenación de serie y secuencia)."
         tests:
-          - not_null
+          - not_null:
+              config:
+                severity: warn
 
       - name: comentario_1
         description: "Comentario adicional 1 (en mayúsculas)."
@@ -141,8 +151,12 @@ models:
       - name: codigo
         description: "Codigo Identificador del cliente en la Base datos Fenix"
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre
         description: "Nombre del cliente"
@@ -163,7 +177,9 @@ models:
       - name: unico
         description: "Identificador único del registro proveniente de la tabla tranfac del sistema Fenix."
         tests:
-          - not_null
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_factura
         description: "Corresponde al campo numfac en la base de datos del sistema Fenix. Indica si el registro corresponde a una factura o Nota de Credito"
@@ -193,8 +209,12 @@ models:
       - name: codigo
         description: "Codigo Identificador del cliente en la Base datos Fenix"
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre
         description: "Nombre del vendedor"

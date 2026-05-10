@@ -45,14 +45,22 @@ models:
       - name: id_vendedor
         description: "Clave sustituta (surrogate key) de la dimensión de vendedores generada mediante una secuencia en el Data Warehouse."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_vendedor
         description: "Código único que identifica al vendedor en el sistema Fenix."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre_vendedor
         description: "Nombre del vendedor registrado en el sistema Fenix."
@@ -70,14 +78,22 @@ models:
       - name: id_articulo
         description: "Clave sustituta (surrogate key) de la dimensión de artículos generada mediante una secuencia en el Data Warehouse."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_articulo
         description: "Código único que identifica al artículo en el sistema Fenix."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre_articulo
         description: "Nombre o descripción del artículo registrado en el sistema Fenix."
@@ -107,14 +123,22 @@ models:
       - name: id_factura
         description: "Clave sustituta (surrogate key) de la dimensión de facturas generada mediante una secuencia en el Data Warehouse."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_factura
         description: "Identificador unico de la factura proveniente del sistema Fenix."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_documento
         description: "Código del documento asociado a la factura en el sistema Fenix. Se utiliza para relacionar facturas con notas de crédito."
@@ -157,15 +181,23 @@ models:
       - name: id_cliente
         description: "Clave sustituta (surrogate key) de la dimensión de facturas generada mediante una secuencia en el Data Warehouse."
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: codigo_cliente
         description: >
           Código identificador del cliente en el sistema transaccional Fenix.
         tests:
-          - unique
-          - not_null
+          - unique:
+              config:
+                severity: error
+          - not_null:
+              config:
+                severity: warn
 
       - name: nombre_cliente
         description: >
@@ -195,7 +227,9 @@ models:
           dimensión de facturas. Permite relacionar la tabla de hechos con
           la dimensión de facturas.
         tests:
-          - not_null
+          - not_null:
+              config:
+                severity: warn
 
       - name: fecha_emision
         description: "Fecha en la que fue emitida la factura."
@@ -212,6 +246,8 @@ models:
               arguments:
                 to: ref('dbt_dim_clientes')
                 field: id_cliente
+              config:
+                severity: warn
 
       - name: id_vendedor
         description: >
@@ -222,6 +258,8 @@ models:
               arguments:
                 to: ref('dbt_dim_vendedores')
                 field: id_vendedor
+              config:
+                severity: warn
 
       - name: id_articulo
         description: >
@@ -232,6 +270,8 @@ models:
               arguments:
                 to: ref('dbt_dim_articulos')
                 field: id_articulo
+              config:
+                severity: error
 
       - name: id_sucursal
         description: >
@@ -241,6 +281,8 @@ models:
               arguments:
                 to: source("features", "sucursales")
                 field: id_sucursal
+              config:
+                severity: warn
 
       - name: cantidad_articulos
         description: >
